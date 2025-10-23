@@ -1,12 +1,12 @@
 """
-Single-op CWL runner with asset-aware metadata.
+Single-op CWL runner with asset-aware metadata (Pattern A).
 
 Requirements:
-  pip install dagster dagster-webserver cwltool pydantic
+  pip install dagster dagster-webserver cwltool
 
 Run:
-  dagster dev
-and load the repository in Dagit. Configure the run via the provided config example at the bottom.
+  dagster dev -m dagster_cwl_poc
+  (or add [tool.dagster] module_name="dagster_cwl_poc" to pyproject.toml and run `dagster dev`)
 """
 
 from __future__ import annotations
@@ -22,7 +22,9 @@ from typing import Any, Dict, Iterable, Mapping, Optional, Tuple, Union
 import dagster as dg
 
 
+# --------------------------------------------------------------------
 # Utilities
+# --------------------------------------------------------------------
 
 
 def _sha256_file(path: Union[str, Path]) -> str:
@@ -44,60 +46,54 @@ def _ensure_dir(p: Union[str, Path]) -> Path:
     return p
 
 
-# Resource: CWL runner configuration
+# --------------------------------------------------------------------
+# Resource: CWL runner configuration (classic @resource for compatibility)
+# --------------------------------------------------------------------
 
 
 @dataclass
 class CWLRunnerConfig:
-    """Configuration for how we call the CWL runner."""
-
     executable: str = "cwltool"
-    default_args: Tuple[str, ...] = (
-        "--enable-dev",
-        "--no-match-user",
+    default_args: Tuple[str, ...] = ("--enable-dev", "--no-match-user")
+    env: Optional[Mapping[str, str]] = None
+    provenance_dir: Optional[str] = None  # if set, we pass --provenance <dir>
+
+
+@dg.resource(
+    config_schema={
+        "executable": dg.Field(str, default_value="cwltool"),
+        "default_args": dg.Field(
+            [str], default_value=["--enable-dev", "--no-match-user"]
+        ),
+        "env": dg.Field(dict, default_value={}),
+        "provenance_dir": dg.Field(str, is_required=False),
+    }
+)
+def cwl_runner(init_context) -> CWLRunnerConfig:
+    cfg = init_context.resource_config
+    return CWLRunnerConfig(
+        executable=cfg["executable"],
+        default_args=tuple(cfg.get("default_args", [])),
+        env=cfg.get("env", {}),
+        provenance_dir=cfg.get("provenance_dir"),
     )
-    env: Optional[Mapping[str, str]] = None
-    # If set, we will append '--provenance <dir>' to collect CWLProv bundles
-    provenance_dir: Optional[str] = None
 
 
-class CWLRunnerResource(dg.ConfigurableResource):
-    """Dagster resource that holds the CWL runner configuration."""
-
-    executable: str = "cwltool"
-    default_args: Optional[Iterable[str]] = None
-    env: Optional[Mapping[str, str]] = None
-    provenance_dir: Optional[str] = None
-
-    def to_runtime(self) -> CWLRunnerConfig:
-        return CWLRunnerConfig(
-            executable=self.executable,
-            default_args=(
-                tuple(self.default_args)
-                if self.default_args
-                else ("--enable-dev", "--no-match-user")
-            ),
-            env=self.env,
-            provenance_dir=self.provenance_dir,
-        )
-
-
-# Optional IOManager: map named CWL outputs to stable locations
+# --------------------------------------------------------------------
+# IOManagers
+# --------------------------------------------------------------------
 
 
 class CWLPathIOManager(dg.IOManager):
     """
-    A minimal IOManager that writes a text file containing the resolved path of
-    each CWL 'File' output. Downstream ops can read the path without guessing.
-
-    This is just proof of concept; Replace with an S3 or object storage manager if needed.
+    Minimal IOManager that writes a text file containing the resolved path of
+    each CWL 'File' output. Downstream ops can read the path deterministically.
     """
 
     def __init__(self, base_dir: str = "outputs_registry"):
         self.base_dir = base_dir
 
     def handle_output(self, context: dg.OutputContext, obj: Any) -> None:
-        # obj is expected to be a filesystem path (str or Path) or a simple value
         root = _ensure_dir(self.base_dir)
         ns = "_".join(context.get_identifier())
         out_path = root / f"{ns}.txt"
@@ -116,49 +112,52 @@ class CWLPathIOManager(dg.IOManager):
 
 
 @dg.io_manager
-def cwl_path_io_manager(_) -> CWLPathIOManager:
+def cwl_path_io_manager(_):
     return CWLPathIOManager()
 
 
-# Schema for op config
+@dg.io_manager(name="path_registry")
+def path_registry_io_manager(_):
+    return CWLPathIOManager(base_dir="outputs_registry")
 
 
-RunCWLConfig = dg.define_structured_config_cls(
-    "RunCWLConfig",
-    {
-        "cwl_path": (str, ...),  # Path or URL to the CWL workflow
-        "job_path": (str, ...),  # Path to the CWL job object (YAML or JSON)
-        "outdir": (str, "outputs"),  # Directory for workflow outputs
-        "cachedir": (
-            str,
-            ".cwl-cache",
-        ),  # Cache directory to enable content-addressed reuse
-        "extra_args": (
-            Iterable[str],
-            (),
-        ),  # Extra CLI flags for cwltool or chosen runner
-    },
-)
-
-
+# --------------------------------------------------------------------
 # The op: run the whole CWL and emit asset-aware metadata
+# --------------------------------------------------------------------
 
 
 @dg.op(
-    config_schema=RunCWLConfig,
+    config_schema={
+        "cwl_path": dg.Field(str, description="Path or URL to the CWL workflow"),
+        "job_path": dg.Field(
+            str, description="Path to the CWL input object (YAML/JSON)"
+        ),
+        "outdir": dg.Field(
+            str, default_value="outputs", description="Directory for workflow outputs"
+        ),
+        "cachedir": dg.Field(
+            str, default_value=".cwl-cache", description="CWL content cache directory"
+        ),
+        "extra_args": dg.Field(
+            [str], default_value=[], description="Extra args for the CWL runner"
+        ),
+    },
     required_resource_keys={"cwl_runner"},
     out=dg.Out(dict, description="Resolved CWL outputs object (parsed JSON)."),
 )
-def run_cwl_op(context: dg.OpExecutionContext) -> dict:
-    cfg = RunCWLConfig.from_config(context.op_config)
-    runner = context.resources.cwl_runner.to_runtime()
+def run_cwl_op(context) -> dict:
+    cfg = context.op_config
+    cwl_path: str = cfg["cwl_path"]
+    job_path: str = cfg["job_path"]
+    outdir: Path = _ensure_dir(cfg.get("outdir", "outputs")).resolve()
+    cachedir: Path = _ensure_dir(cfg.get("cachedir", ".cwl-cache")).resolve()
+    extra_args = list(cfg.get("extra_args", []))
 
-    outdir = _ensure_dir(cfg.outdir).resolve()
-    cachedir = _ensure_dir(cfg.cachedir).resolve()
+    runner: CWLRunnerConfig = context.resources.cwl_runner
 
     # Basic provenance on inputs
-    cwl_hash = _sha256_file(cfg.cwl_path) if os.path.exists(cfg.cwl_path) else ""
-    job_hash = _sha256_file(cfg.job_path) if os.path.exists(cfg.job_path) else ""
+    cwl_hash = _sha256_file(cwl_path) if os.path.exists(cwl_path) else ""
+    job_hash = _sha256_file(job_path) if os.path.exists(job_path) else ""
 
     cmd = [
         runner.executable,
@@ -167,22 +166,17 @@ def run_cwl_op(context: dg.OpExecutionContext) -> dict:
         "--cachedir",
         str(cachedir),
         *runner.default_args,
-        *cfg.extra_args,
+        *extra_args,
     ]
-
-    # Collect a CWLProv bundle if requested
     prov_dir = None
     if runner.provenance_dir:
         prov_dir = _ensure_dir(runner.provenance_dir).resolve()
         cmd.extend(["--provenance", str(prov_dir)])
+    cmd.extend([cwl_path, job_path])
 
-    cmd.extend([cfg.cwl_path, cfg.job_path])
-
-    # Log the exact command for reproducibility
     cmd_str = " ".join(shlex.quote(x) for x in cmd)
     context.log.info(f"Running CWL: {cmd_str}")
 
-    # Invoke the runner
     proc = subprocess.run(
         cmd,
         check=False,
@@ -191,28 +185,26 @@ def run_cwl_op(context: dg.OpExecutionContext) -> dict:
         env={**os.environ, **(runner.env or {})},
     )
 
-    # Attach raw logs for debugging even on success
     context.log.debug(proc.stdout[:10000])
     if proc.returncode != 0:
         context.log.error(proc.stderr[:10000])
         raise RuntimeError(f"cwltool failed with code {proc.returncode}")
 
-    # cwltool prints a JSON object with final resolved outputs to stdout
+    # Parse outputs JSON
     try:
         outputs = json.loads(proc.stdout)
     except json.JSONDecodeError:
-        # Some runners print logs to stdout and write outputs to a file named 'cwl.output.json' in outdir
         alt = outdir / "cwl.output.json"
         if alt.exists():
             outputs = _read_json(alt)
         else:
             raise
 
-    # Emit an overall materialization for the run itself
+    # Overall materialization
     run_meta = {
-        "cwl_path": cfg.cwl_path,
+        "cwl_path": cwl_path,
         "cwl_sha256": cwl_hash,
-        "job_path": cfg.job_path,
+        "job_path": job_path,
         "job_sha256": job_hash,
         "outdir": str(outdir),
         "cachedir": str(cachedir),
@@ -225,16 +217,15 @@ def run_cwl_op(context: dg.OpExecutionContext) -> dict:
 
     context.log_event(
         dg.AssetMaterialization(
-            asset_key=dg.AssetKey(["cwl_run", Path(cfg.cwl_path).stem]),
+            asset_key=dg.AssetKey(["cwl_run", Path(cwl_path).stem]),
             description="CWL run materialization",
             metadata=run_meta,
         )
     )
 
-    # Emit materializations for each output and build a simple dict of resolved paths or values
+    # Per-output materializations
     resolved: Dict[str, Any] = {}
     for name, val in outputs.items():
-        # CWL 'File' object
         if isinstance(val, dict) and val.get("class") == "File":
             path = val.get("path") or val.get("location") or val.get("basename")
             sha256 = None
@@ -262,7 +253,6 @@ def run_cwl_op(context: dg.OpExecutionContext) -> dict:
             )
             resolved[name] = path
 
-        # CWL 'Directory' object
         elif isinstance(val, dict) and val.get("class") == "Directory":
             path = val.get("path") or val.get("location") or val.get("basename")
             meta = {
@@ -284,7 +274,6 @@ def run_cwl_op(context: dg.OpExecutionContext) -> dict:
             resolved[name] = path
 
         else:
-            # Primitive values or arrays
             context.log_event(
                 dg.AssetMaterialization(
                     asset_key=dg.AssetKey(["cwl_output", name]),
@@ -297,21 +286,92 @@ def run_cwl_op(context: dg.OpExecutionContext) -> dict:
     return resolved
 
 
-# Job and repository
+# --------------------------------------------------------------------
+# Downstream: select and consume one output (optional chain)
+# --------------------------------------------------------------------
 
 
-@dg.job(
-    resource_defs={
-        "cwl_runner": CWLRunnerResource(),  # default runner
-        "io_manager": cwl_path_io_manager,  # optional output path registry
-    }
+@dg.op(
+    config_schema={
+        "output_key": dg.Field(str, description="Name of the CWL output to select")
+    },
+    ins={"outputs_map": dg.In(dict)},
+    out=dg.Out(
+        str,
+        io_manager_key="path_registry",
+        description="Filesystem path of the selected CWL output",
+    ),
 )
+def select_cwl_output(context, outputs_map: dict) -> str:
+    key = context.op_config["output_key"]
+    if key not in outputs_map:
+        raise dg.Failure(
+            f"Output key '{key}' not found. Available: {list(outputs_map.keys())}"
+        )
+    path = outputs_map[key]
+    if not isinstance(path, str):
+        raise dg.Failure(
+            f"Selected output '{key}' is not a file path (got {type(path).__name__})."
+        )
+    context.log.info(f"Selected CWL output '{key}': {path}")
+    return path
+
+
+@dg.op(ins={"file_path": dg.In(str)}, out=dg.Out(dg.Nothing))
+def consume_selected_file(context, file_path: str) -> None:
+    p = Path(file_path)
+    if not p.exists():
+        raise dg.Failure(f"File does not exist: {p}")
+    size = p.stat().st_size
+    sha256 = _sha256_file(p)
+    try:
+        with open(p, "rb") as f:
+            head = f.read(256)
+    except Exception:
+        head = b""
+
+    context.log_event(
+        dg.AssetMaterialization(
+            asset_key=dg.AssetKey(["consumed_output", p.name]),
+            description="Verified selected CWL file output",
+            metadata={
+                "path": str(p.resolve()),
+                "size": size,
+                "sha256": sha256,
+                "preview_bytes_hex": head[:64].hex(),
+            },
+        )
+    )
+
+
+# --------------------------------------------------------------------
+# Jobs and Definitions
+# --------------------------------------------------------------------
+
+
+@dg.job(resource_defs={"cwl_runner": cwl_runner, "io_manager": cwl_path_io_manager})
 def cwl_job():
     run_cwl_op()
 
 
-# Expose a repository for dagster dev
+@dg.job(
+    resource_defs={
+        "cwl_runner": cwl_runner,
+        "io_manager": cwl_path_io_manager,
+        "path_registry": path_registry_io_manager,
+    }
+)
+def cwl_job_with_consumer():
+    outputs = run_cwl_op()
+    selected = select_cwl_output(outputs)
+    consume_selected_file(selected)
+
+
 defs = dg.Definitions(
-    jobs=[cwl_job],
-    resources={"cwl_runner": CWLRunnerResource(), "io_manager": cwl_path_io_manager},
+    jobs=[cwl_job, cwl_job_with_consumer],
+    resources={
+        "cwl_runner": cwl_runner,
+        "io_manager": cwl_path_io_manager,
+        "path_registry": path_registry_io_manager,
+    },
 )
