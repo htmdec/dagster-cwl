@@ -1,0 +1,5 @@
+454efd1a031b4e18343ad3329403cfffc66b8eec  workflow/packed.cwl
+68af797a65af9e9d7b51e17d2959d7d93fe28e3c  snapshot/arith_workflow.cwl
+01db87f71892e69eaf02a1fbf0fe6b1356ec7121  metadata/logs/engine.556724b0-11cb-4cea-9e18-97f78abd6560.txt
+e6e12efe0791fbdf8909c06803f56b63115e3db3  metadata/manifest.json
+3b5b900b99b0049d909652628178a88a247b6f4d  bag-info.txt

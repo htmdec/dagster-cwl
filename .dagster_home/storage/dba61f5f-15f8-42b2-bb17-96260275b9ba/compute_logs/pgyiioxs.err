@@ -1,0 +1,66 @@
+[32m2025-10-24 00:58:38 +0200[0m - dagster - [34mDEBUG[0m - cwl_job - dba61f5f-15f8-42b2-bb17-96260275b9ba - 9283 - LOGS_CAPTURED - Started capturing logs in process (pid: 9283).
+[32m2025-10-24 00:58:38 +0200[0m - dagster - [34mDEBUG[0m - cwl_job - dba61f5f-15f8-42b2-bb17-96260275b9ba - 9283 - run_cwl_op - STEP_START - Started execution of step "run_cwl_op".
+[32m2025-10-24 00:58:38 +0200[0m - dagster - [34mERROR[0m - [31mcwl_job - dba61f5f-15f8-42b2-bb17-96260275b9ba - 9283 - run_cwl_op - STEP_FAILURE - Execution of step "run_cwl_op" failed.
+
+dagster._core.errors.DagsterExecutionStepExecutionError: Error occurred while executing op "run_cwl_op"::
+
+OSError: [Errno 30] Read-only file system: '/ABS'
+
+Stack Trace:
+  File "/Users/elbert/miniconda3/envs/dagster-cwl/lib/python3.9/site-packages/dagster/_core/execution/plan/utils.py", line 54, in op_execution_error_boundary
+    yield
+  File "/Users/elbert/miniconda3/envs/dagster-cwl/lib/python3.9/site-packages/dagster/_utils/__init__.py", line 482, in iterate_with_context
+    next_output = next(iterator)
+  File "/Users/elbert/miniconda3/envs/dagster-cwl/lib/python3.9/site-packages/dagster/_core/execution/plan/compute_generator.py", line 140, in _coerce_op_compute_fn_to_iterator
+    result = invoke_compute_fn(
+  File "/Users/elbert/miniconda3/envs/dagster-cwl/lib/python3.9/site-packages/dagster/_core/execution/plan/compute_generator.py", line 128, in invoke_compute_fn
+    return fn(context, **args_to_pass) if context_arg_provided else fn(**args_to_pass)
+  File "/Users/elbert/Documents/GitHub/htmdec/dagster-cwl/src/dagster_cwl_modern/dagster_cwl_modern.py", line 138, in run_cwl_op
+    outdir = _ensure_dir(cfg.get("outdir", "outputs")).resolve()
+  File "/Users/elbert/Documents/GitHub/htmdec/dagster-cwl/src/dagster_cwl_modern/dagster_cwl_modern.py", line 51, in _ensure_dir
+    p.mkdir(parents=True, exist_ok=True)
+  File "/Users/elbert/miniconda3/envs/dagster-cwl/lib/python3.9/pathlib.py", line 1255, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+  File "/Users/elbert/miniconda3/envs/dagster-cwl/lib/python3.9/pathlib.py", line 1255, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+  File "/Users/elbert/miniconda3/envs/dagster-cwl/lib/python3.9/pathlib.py", line 1255, in mkdir
+    self.parent.mkdir(parents=True, exist_ok=True)
+  [Previous line repeated 2 more times]
+  File "/Users/elbert/miniconda3/envs/dagster-cwl/lib/python3.9/pathlib.py", line 1251, in mkdir
+    self._accessor.mkdir(self, mode)
+
+The above exception occurred during handling of the following exception:
+FileNotFoundError: [Errno 2] No such file or directory: '/ABS/PATH'
+
+Stack Trace:
+  File "/Users/elbert/miniconda3/envs/dagster-cwl/lib/python3.9/pathlib.py", line 1251, in mkdir
+    self._accessor.mkdir(self, mode)
+
+The above exception occurred during handling of the following exception:
+FileNotFoundError: [Errno 2] No such file or directory: '/ABS/PATH/TO'
+
+Stack Trace:
+  File "/Users/elbert/miniconda3/envs/dagster-cwl/lib/python3.9/pathlib.py", line 1251, in mkdir
+    self._accessor.mkdir(self, mode)
+
+The above exception occurred during handling of the following exception:
+FileNotFoundError: [Errno 2] No such file or directory: '/ABS/PATH/TO/your'
+
+Stack Trace:
+  File "/Users/elbert/miniconda3/envs/dagster-cwl/lib/python3.9/pathlib.py", line 1251, in mkdir
+    self._accessor.mkdir(self, mode)
+
+The above exception occurred during handling of the following exception:
+FileNotFoundError: [Errno 2] No such file or directory: '/ABS/PATH/TO/your/repo'
+
+Stack Trace:
+  File "/Users/elbert/miniconda3/envs/dagster-cwl/lib/python3.9/pathlib.py", line 1251, in mkdir
+    self._accessor.mkdir(self, mode)
+
+The above exception occurred during handling of the following exception:
+FileNotFoundError: [Errno 2] No such file or directory: '/ABS/PATH/TO/your/repo/outputs'
+
+Stack Trace:
+  File "/Users/elbert/miniconda3/envs/dagster-cwl/lib/python3.9/pathlib.py", line 1251, in mkdir
+    self._accessor.mkdir(self, mode)
+[0m

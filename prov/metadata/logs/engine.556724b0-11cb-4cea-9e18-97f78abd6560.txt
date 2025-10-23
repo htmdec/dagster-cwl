@@ -1,0 +1,7 @@
+[2025-10-23T23:08:42,220.770121Z] [cwltool] /Users/elbert/miniconda3/envs/dagster-cwl/bin/cwltool --outdir /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/outputs --cachedir /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/.cwl-cache --enable-dev --no-match-user --provenance /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/prov /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/cwl/arith_workflow.cwl /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/cwl/inputs.yml
+[2025-10-23T23:08:42,223.513126Z] Resolved '/Users/elbert/Documents/GitHub/htmdec/dagster-cwl/cwl/arith_workflow.cwl' to 'file:///Users/elbert/Documents/GitHub/htmdec/dagster-cwl/cwl/arith_workflow.cwl'
+[2025-10-23T23:08:42,730.297089Z] Workflow error, try again with --debug for more information:
+cwl/arith_workflow.cwl:16:5: Expression evaluation error:
+                             Syntax error in parameter reference '(( $(inputs.a) + $(inputs.b) ))'.
+                             This could be due to using Javascript code without specifying
+                             InlineJavascriptRequirement.
