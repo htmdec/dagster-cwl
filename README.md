@@ -1,5 +1,5 @@
 
-# CWL + Dagster (Pattern A) — src-layout
+# CWL + Dagster
 
 This repo uses **src/** layout so editable installs and conda builds are robust.
 
