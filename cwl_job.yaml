@@ -1,0 +1,20 @@
+resources:
+  cwl_runner:
+    config:
+      executable: "cwltool"
+      default_args:
+        - "--enable-dev"
+        - "--no-match-user"
+      provenance_dir: "prov"   # optional. comment out to skip
+      env:
+        CWL_SINGULARITY: "0"   # or set container engine env as needed
+
+ops:
+  run_cwl_op:
+    config:
+      cwl_path: "/abs/path/to/workflow.cwl"
+      job_path: "/abs/path/to/job.yml"
+      outdir: "outputs"
+      cachedir: ".cwl-cache"
+      extra_args:
+        - "--parallel"
