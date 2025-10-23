@@ -1,0 +1,43 @@
+[32m2025-10-24 01:15:14 +0200[0m - dagster - [34mDEBUG[0m - cwl_job - 67de1781-eb69-47e9-a5fa-de0575f5f218 - 12719 - LOGS_CAPTURED - Started capturing logs in process (pid: 12719).
+[32m2025-10-24 01:15:14 +0200[0m - dagster - [34mDEBUG[0m - cwl_job - 67de1781-eb69-47e9-a5fa-de0575f5f218 - 12719 - run_cwl_op - STEP_START - Started execution of step "run_cwl_op".
+[32m2025-10-24 01:15:14 +0200[0m - dagster - [34mINFO[0m - cwl_job - 67de1781-eb69-47e9-a5fa-de0575f5f218 - run_cwl_op - Running CWL: cwltool --outdir /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/outputs --cachedir /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/.cwl-cache --enable-dev --no-match-user --provenance /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/prov /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/cwl/arith_workflow.cwl /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/cwl/inputs.yml
+[32m2025-10-24 01:15:14 +0200[0m - dagster - [34mDEBUG[0m - cwl_job - 67de1781-eb69-47e9-a5fa-de0575f5f218 - run_cwl_op
+[32m2025-10-24 01:15:14 +0200[0m - dagster - [34mERROR[0m - [31mcwl_job - 67de1781-eb69-47e9-a5fa-de0575f5f218 - run_cwl_op - [1;30mINFO[0m /Users/elbert/miniconda3/envs/dagster-cwl/bin/cwltool 3.1.20250925164626
+[1;30mINFO[0m [cwltool] /Users/elbert/miniconda3/envs/dagster-cwl/bin/cwltool --outdir /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/outputs --cachedir /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/.cwl-cache --enable-dev --no-match-user --provenance /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/prov /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/cwl/arith_workflow.cwl /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/cwl/inputs.yml
+[1;30mINFO[0m Resolved '/Users/elbert/Documents/GitHub/htmdec/dagster-cwl/cwl/arith_workflow.cwl' to 'file:///Users/elbert/Documents/GitHub/htmdec/dagster-cwl/cwl/arith_workflow.cwl'
+Syntax error in parameter reference '(( $1 + $2 ))'. This could be due to using Javascript code without specifying InlineJavascriptRequirement.
+Traceback (most recent call last):
+  File "/Users/elbert/miniconda3/envs/dagster-cwl/lib/python3.9/site-packages/cwl_utils/expression.py", line 305, in do_eval
+    return interpolate(
+  File "/Users/elbert/miniconda3/envs/dagster-cwl/lib/python3.9/site-packages/cwl_utils/expression.py", line 207, in interpolate
+    e = evaluator(
+  File "/Users/elbert/miniconda3/envs/dagster-cwl/lib/python3.9/site-packages/cwl_utils/expression.py", line 162, in evaluator
+    raise JavascriptException(
+cwl_utils.errors.JavascriptException: Syntax error in parameter reference '(( $1 + $2 ))'. This could be due to using Javascript code without specifying InlineJavascriptRequirement.
+[1;30mERROR[0m [31mWorkflow error, try again with --debug for more information:
+cwl/arith_workflow.cwl:23:5: Expression evaluation error:
+                             Syntax error in parameter reference '(( $1 + $2 ))'. This could be due
+                             to using Javascript code without specifying
+                             InlineJavascriptRequirement.[0m
+[1;30mINFO[0m [provenance] Finalizing Research Object
+[1;30mINFO[0m [provenance] Deleting existing /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/prov
+[1;30mINFO[0m [provenance] Research Object saved to /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/prov
+[0m
+[32m2025-10-24 01:15:14 +0200[0m - dagster - [34mERROR[0m - [31mcwl_job - 67de1781-eb69-47e9-a5fa-de0575f5f218 - 12719 - run_cwl_op - STEP_FAILURE - Execution of step "run_cwl_op" failed.
+
+dagster._core.errors.DagsterExecutionStepExecutionError: Error occurred while executing op "run_cwl_op"::
+
+RuntimeError: cwltool failed with code 1
+
+Stack Trace:
+  File "/Users/elbert/miniconda3/envs/dagster-cwl/lib/python3.9/site-packages/dagster/_core/execution/plan/utils.py", line 54, in op_execution_error_boundary
+    yield
+  File "/Users/elbert/miniconda3/envs/dagster-cwl/lib/python3.9/site-packages/dagster/_utils/__init__.py", line 482, in iterate_with_context
+    next_output = next(iterator)
+  File "/Users/elbert/miniconda3/envs/dagster-cwl/lib/python3.9/site-packages/dagster/_core/execution/plan/compute_generator.py", line 140, in _coerce_op_compute_fn_to_iterator
+    result = invoke_compute_fn(
+  File "/Users/elbert/miniconda3/envs/dagster-cwl/lib/python3.9/site-packages/dagster/_core/execution/plan/compute_generator.py", line 128, in invoke_compute_fn
+    return fn(context, **args_to_pass) if context_arg_provided else fn(**args_to_pass)
+  File "/Users/elbert/Documents/GitHub/htmdec/dagster-cwl/src/dagster_cwl_modern/dagster_cwl_modern.py", line 175, in run_cwl_op
+    raise RuntimeError(f"cwltool failed with code {proc.returncode}")
+[0m

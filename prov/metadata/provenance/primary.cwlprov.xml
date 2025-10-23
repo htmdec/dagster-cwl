@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='ASCII'?>
+<prov:document xmlns:wfprov="http://purl.org/wf4ever/wfprov#" xmlns:wfdesc="http://purl.org/wf4ever/wfdesc#" xmlns:cwlprov="https://w3id.org/cwl/prov#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:schema="http://schema.org/" xmlns:orcid="https://orcid.org/" xmlns:id="urn:uuid:" xmlns:data="urn:hash::sha1:" xmlns:sha256="nih:sha-256;" xmlns:researchobject="arcp://uuid,95a586be-bb64-49fd-90ce-ad692e6130ce/" xmlns:metadata="arcp://uuid,95a586be-bb64-49fd-90ce-ad692e6130ce/metadata/" xmlns:provenance="arcp://uuid,95a586be-bb64-49fd-90ce-ad692e6130ce/metadata/provenance/" xmlns:wf="arcp://uuid,95a586be-bb64-49fd-90ce-ad692e6130ce/workflow/packed.cwl#" xmlns:input="arcp://uuid,95a586be-bb64-49fd-90ce-ad692e6130ce/workflow/primary-job.json#" xmlns:wf4ever="http://purl.org/wf4ever/wf4ever#" xmlns:prov="http://www.w3.org/ns/prov#" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <prov:agent prov:id="id:2b0a4daa-2624-4508-8dea-08fc2024d279"/>
+  <prov:softwareAgent prov:id="id:5398408e-3860-4e9b-977d-8dfddb9a4da4">
+    <prov:label>cwltool 3.1.20250925164626</prov:label>
+    <prov:type xsi:type="xsd:QName">wfprov:WorkflowEngine</prov:type>
+  </prov:softwareAgent>
+  <prov:wasStartedBy>
+    <prov:activity prov:ref="id:5398408e-3860-4e9b-977d-8dfddb9a4da4"/>
+    <prov:starter prov:ref="id:2b0a4daa-2624-4508-8dea-08fc2024d279"/>
+    <prov:time>2025-10-24T01:50:46.869515</prov:time>
+  </prov:wasStartedBy>
+  <prov:activity prov:id="id:95a586be-bb64-49fd-90ce-ad692e6130ce">
+    <prov:startTime>2025-10-24T01:50:46.869534</prov:startTime>
+    <prov:label>Run of workflow/packed.cwl#main</prov:label>
+    <prov:type xsi:type="xsd:QName">wfprov:WorkflowRun</prov:type>
+  </prov:activity>
+  <prov:wasAssociatedWith>
+    <prov:activity prov:ref="id:95a586be-bb64-49fd-90ce-ad692e6130ce"/>
+    <prov:agent prov:ref="id:5398408e-3860-4e9b-977d-8dfddb9a4da4"/>
+    <prov:plan prov:ref="wf:main"/>
+  </prov:wasAssociatedWith>
+  <prov:wasStartedBy>
+    <prov:activity prov:ref="id:95a586be-bb64-49fd-90ce-ad692e6130ce"/>
+    <prov:starter prov:ref="id:5398408e-3860-4e9b-977d-8dfddb9a4da4"/>
+    <prov:time>2025-10-24T01:50:46.869565</prov:time>
+  </prov:wasStartedBy>
+  <prov:plan prov:id="wf:main">
+    <prov:label>Prospective provenance</prov:label>
+    <prov:type xsi:type="xsd:QName">wfdesc:Process</prov:type>
+  </prov:plan>
+  <prov:entity prov:id="id:ac440f95-5438-4194-a4f4-d20dc3b64471">
+    <prov:value xsi:type="xsd:int">2</prov:value>
+  </prov:entity>
+  <prov:used>
+    <prov:activity prov:ref="id:95a586be-bb64-49fd-90ce-ad692e6130ce"/>
+    <prov:entity prov:ref="id:ac440f95-5438-4194-a4f4-d20dc3b64471"/>
+    <prov:time>2025-10-24T01:50:46.870516</prov:time>
+    <prov:role xsi:type="xsd:QName">wf:main/a</prov:role>
+  </prov:used>
+  <prov:entity prov:id="id:9fa7da20-744b-4a82-a4d6-5032d6502789">
+    <prov:value xsi:type="xsd:int">40</prov:value>
+  </prov:entity>
+  <prov:used>
+    <prov:activity prov:ref="id:95a586be-bb64-49fd-90ce-ad692e6130ce"/>
+    <prov:entity prov:ref="id:9fa7da20-744b-4a82-a4d6-5032d6502789"/>
+    <prov:time>2025-10-24T01:50:46.870547</prov:time>
+    <prov:role xsi:type="xsd:QName">wf:main/b</prov:role>
+  </prov:used>
+  <prov:entity prov:id="data:34973274ccef6ab4dfaaf86599792fa9c3fe4689">
+    <prov:type xsi:type="xsd:QName">wfprov:Artifact</prov:type>
+  </prov:entity>
+  <prov:entity prov:id="id:d1749250-3ab2-429d-ba6b-ec56bd1362a0">
+    <prov:type xsi:type="xsd:QName">wf4ever:File</prov:type>
+    <prov:type xsi:type="xsd:QName">wfprov:Artifact</prov:type>
+    <cwlprov:basename>sum.txt</cwlprov:basename>
+    <cwlprov:nameext>.txt</cwlprov:nameext>
+    <cwlprov:nameroot>sum</cwlprov:nameroot>
+  </prov:entity>
+  <prov:specializationOf>
+    <prov:specificEntity prov:ref="id:d1749250-3ab2-429d-ba6b-ec56bd1362a0"/>
+    <prov:generalEntity prov:ref="data:34973274ccef6ab4dfaaf86599792fa9c3fe4689"/>
+  </prov:specializationOf>
+  <prov:wasGeneratedBy>
+    <prov:entity prov:ref="id:d1749250-3ab2-429d-ba6b-ec56bd1362a0"/>
+    <prov:activity prov:ref="id:95a586be-bb64-49fd-90ce-ad692e6130ce"/>
+    <prov:time>2025-10-24T01:50:46.871777</prov:time>
+    <prov:role xsi:type="xsd:QName">wf:main/primary/sum_file</prov:role>
+  </prov:wasGeneratedBy>
+  <prov:wasEndedBy>
+    <prov:activity prov:ref="id:95a586be-bb64-49fd-90ce-ad692e6130ce"/>
+    <prov:ender prov:ref="id:5398408e-3860-4e9b-977d-8dfddb9a4da4"/>
+    <prov:time>2025-10-24T01:50:46.872804</prov:time>
+  </prov:wasEndedBy>
+</prov:document>

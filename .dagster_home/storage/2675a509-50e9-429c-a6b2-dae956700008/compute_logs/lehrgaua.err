@@ -1,0 +1,20 @@
+[32m2025-10-24 01:50:46 +0200[0m - dagster - [34mDEBUG[0m - cwl_job - 2675a509-50e9-429c-a6b2-dae956700008 - 19743 - LOGS_CAPTURED - Started capturing logs in process (pid: 19743).
+[32m2025-10-24 01:50:46 +0200[0m - dagster - [34mDEBUG[0m - cwl_job - 2675a509-50e9-429c-a6b2-dae956700008 - 19743 - run_cwl_op - STEP_START - Started execution of step "run_cwl_op".
+[32m2025-10-24 01:50:46 +0200[0m - dagster - [34mINFO[0m - cwl_job - 2675a509-50e9-429c-a6b2-dae956700008 - run_cwl_op - Running CWL: cwltool --outdir /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/outputs --cachedir /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/.cwl-cache --enable-dev --no-match-user --provenance /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/prov /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/cwl/arith_workflow.cwl /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/cwl/inputs.yml
+[32m2025-10-24 01:50:46 +0200[0m - dagster - [34mDEBUG[0m - cwl_job - 2675a509-50e9-429c-a6b2-dae956700008 - run_cwl_op - {
+    "sum_file": {
+        "location": "file:///Users/elbert/Documents/GitHub/htmdec/dagster-cwl/outputs/sum.txt",
+        "basename": "sum.txt",
+        "class": "File",
+        "checksum": "sha1$34973274ccef6ab4dfaaf86599792fa9c3fe4689",
+        "size": 3,
+        "path": "/Users/elbert/Documents/GitHub/htmdec/dagster-cwl/outputs/sum.txt"
+    }
+}
+[32m2025-10-24 01:50:46 +0200[0m - dagster - [34mDEBUG[0m - cwl_job - 2675a509-50e9-429c-a6b2-dae956700008 - 19743 - run_cwl_op - ASSET_MATERIALIZATION - CWL run materialization
+[32m2025-10-24 01:50:46 +0200[0m - dagster - [34mINFO[0m - cwl_job - 2675a509-50e9-429c-a6b2-dae956700008 - run_cwl_op - Contents of CWL output file 'sum_file' (/Users/elbert/Documents/GitHub/htmdec/dagster-cwl/outputs/sum.txt): 42
+[32m2025-10-24 01:50:46 +0200[0m - dagster - [34mDEBUG[0m - cwl_job - 2675a509-50e9-429c-a6b2-dae956700008 - 19743 - run_cwl_op - ASSET_MATERIALIZATION - CWL output file for 'sum_file'
+[32m2025-10-24 01:50:46 +0200[0m - dagster - [34mDEBUG[0m - cwl_job - 2675a509-50e9-429c-a6b2-dae956700008 - 19743 - run_cwl_op - STEP_OUTPUT - Yielded output "result" of type "dict". (Type check passed).
+[32m2025-10-24 01:50:46 +0200[0m - dagster - [34mINFO[0m - cwl_job - 2675a509-50e9-429c-a6b2-dae956700008 - run_cwl_op - [IOManager] Wrote path to outputs_registry/2675a509-50e9-429c-a6b2-dae956700008_run_cwl_op_result.txt
+[32m2025-10-24 01:50:46 +0200[0m - dagster - [34mDEBUG[0m - cwl_job - 2675a509-50e9-429c-a6b2-dae956700008 - 19743 - run_cwl_op - HANDLED_OUTPUT - Handled output "result" using IO manager "io_manager"
+[32m2025-10-24 01:50:46 +0200[0m - dagster - [34mDEBUG[0m - cwl_job - 2675a509-50e9-429c-a6b2-dae956700008 - 19743 - run_cwl_op - STEP_SUCCESS - Finished execution of step "run_cwl_op" in 802ms.

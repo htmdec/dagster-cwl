@@ -1,0 +1,13 @@
+{
+    "sum_file": {
+        "location": "../data/34/34973274ccef6ab4dfaaf86599792fa9c3fe4689",
+        "basename": "sum.txt",
+        "nameroot": "sum",
+        "nameext": ".txt",
+        "class": "File",
+        "checksum": "sha1$34973274ccef6ab4dfaaf86599792fa9c3fe4689",
+        "size": 3,
+        "http://commonwl.org/cwltool#generation": 0,
+        "@id": "urn:uuid:d1749250-3ab2-429d-ba6b-ec56bd1362a0"
+    }
+}

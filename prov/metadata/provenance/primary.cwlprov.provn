@@ -1,0 +1,34 @@
+document
+  prefix wfprov <http://purl.org/wf4ever/wfprov#>
+  prefix wfdesc <http://purl.org/wf4ever/wfdesc#>
+  prefix cwlprov <https://w3id.org/cwl/prov#>
+  prefix foaf <http://xmlns.com/foaf/0.1/>
+  prefix schema <http://schema.org/>
+  prefix orcid <https://orcid.org/>
+  prefix id <urn:uuid:>
+  prefix data <urn:hash::sha1:>
+  prefix sha256 <nih:sha-256;>
+  prefix researchobject <arcp://uuid,95a586be-bb64-49fd-90ce-ad692e6130ce/>
+  prefix metadata <arcp://uuid,95a586be-bb64-49fd-90ce-ad692e6130ce/metadata/>
+  prefix provenance <arcp://uuid,95a586be-bb64-49fd-90ce-ad692e6130ce/metadata/provenance/>
+  prefix wf <arcp://uuid,95a586be-bb64-49fd-90ce-ad692e6130ce/workflow/packed.cwl#>
+  prefix input <arcp://uuid,95a586be-bb64-49fd-90ce-ad692e6130ce/workflow/primary-job.json#>
+  prefix wf4ever <http://purl.org/wf4ever/wf4ever#>
+  
+  agent(id:2b0a4daa-2624-4508-8dea-08fc2024d279)
+  agent(id:5398408e-3860-4e9b-977d-8dfddb9a4da4, [prov:type='prov:SoftwareAgent', prov:type='wfprov:WorkflowEngine', prov:label="cwltool 3.1.20250925164626"])
+  wasStartedBy(id:5398408e-3860-4e9b-977d-8dfddb9a4da4, -, id:2b0a4daa-2624-4508-8dea-08fc2024d279, 2025-10-24T01:50:46.869515)
+  activity(id:95a586be-bb64-49fd-90ce-ad692e6130ce, 2025-10-24T01:50:46.869534, -, [prov:type='wfprov:WorkflowRun', prov:label="Run of workflow/packed.cwl#main"])
+  wasAssociatedWith(id:95a586be-bb64-49fd-90ce-ad692e6130ce, id:5398408e-3860-4e9b-977d-8dfddb9a4da4, wf:main)
+  wasStartedBy(id:95a586be-bb64-49fd-90ce-ad692e6130ce, -, id:5398408e-3860-4e9b-977d-8dfddb9a4da4, 2025-10-24T01:50:46.869565)
+  entity(wf:main, [prov:type='prov:Plan', prov:type='wfdesc:Process', prov:label="Prospective provenance"])
+  entity(id:ac440f95-5438-4194-a4f4-d20dc3b64471, [prov:value=2])
+  used(id:95a586be-bb64-49fd-90ce-ad692e6130ce, id:ac440f95-5438-4194-a4f4-d20dc3b64471, 2025-10-24T01:50:46.870516, [prov:role='wf:main/a'])
+  entity(id:9fa7da20-744b-4a82-a4d6-5032d6502789, [prov:value=40])
+  used(id:95a586be-bb64-49fd-90ce-ad692e6130ce, id:9fa7da20-744b-4a82-a4d6-5032d6502789, 2025-10-24T01:50:46.870547, [prov:role='wf:main/b'])
+  entity(data:34973274ccef6ab4dfaaf86599792fa9c3fe4689, [prov:type='wfprov:Artifact'])
+  entity(id:d1749250-3ab2-429d-ba6b-ec56bd1362a0, [prov:type='wf4ever:File', prov:type='wfprov:Artifact', cwlprov:basename="sum.txt", cwlprov:nameroot="sum", cwlprov:nameext=".txt"])
+  specializationOf(id:d1749250-3ab2-429d-ba6b-ec56bd1362a0, data:34973274ccef6ab4dfaaf86599792fa9c3fe4689)
+  wasGeneratedBy(id:d1749250-3ab2-429d-ba6b-ec56bd1362a0, id:95a586be-bb64-49fd-90ce-ad692e6130ce, 2025-10-24T01:50:46.871777, [prov:role='wf:main/primary/sum_file'])
+  wasEndedBy(id:95a586be-bb64-49fd-90ce-ad692e6130ce, -, id:5398408e-3860-4e9b-977d-8dfddb9a4da4, 2025-10-24T01:50:46.872804)
+endDocument

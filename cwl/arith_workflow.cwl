@@ -3,8 +3,14 @@ class: CommandLineTool
 baseCommand: ["bash", "-lc"]
 
 inputs:
-  a: int
-  b: int
+  a:
+    type: int
+    inputBinding:
+      position: 1
+  b:
+    type: int
+    inputBinding:
+      position: 2
 
 outputs:
   sum_file:
@@ -12,10 +18,12 @@ outputs:
     outputBinding:
       glob: sum.txt
 
-# Build a tiny command that uses positional args $1 and $2
 arguments:
+  # <SCRIPT> — avoid $(( ... )) and $( ... ); use backticks to avoid CWL parsing '$('
   - valueFrom: |
-      echo $(( $1 + $2 )) > sum.txt
+      sum=`expr "$1" + "$2"`
+      echo "$sum" > sum.txt
     shellQuote: false
-  - $(inputs.a)
-  - $(inputs.b)
+
+  # <NAME> — required so that $1 and $2 are your two numbers inside the script
+  - valueFrom: "cwltool-args"

@@ -1,0 +1,4 @@
+[2025-10-23T23:50:46,355.551004Z] [cwltool] /Users/elbert/miniconda3/envs/dagster-cwl/bin/cwltool --outdir /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/outputs --cachedir /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/.cwl-cache --enable-dev --no-match-user --provenance /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/prov /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/cwl/arith_workflow.cwl /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/cwl/inputs.yml
+[2025-10-23T23:50:46,358.109951Z] Resolved '/Users/elbert/Documents/GitHub/htmdec/dagster-cwl/cwl/arith_workflow.cwl' to 'file:///Users/elbert/Documents/GitHub/htmdec/dagster-cwl/cwl/arith_workflow.cwl'
+[2025-10-23T23:50:46,870.368958Z] [job arith_workflow.cwl] Using cached output in /Users/elbert/Documents/GitHub/htmdec/dagster-cwl/.cwl-cache/66f305aaecf33fcb9e0561588bd72b24
+[2025-10-23T23:50:46,891.887188Z] Final process status is success

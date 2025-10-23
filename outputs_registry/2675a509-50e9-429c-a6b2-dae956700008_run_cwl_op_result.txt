@@ -1,0 +1,1 @@
+{'sum_file': '/Users/elbert/Documents/GitHub/htmdec/dagster-cwl/outputs/sum.txt'}
