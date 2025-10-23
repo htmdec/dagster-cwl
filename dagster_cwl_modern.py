@@ -120,7 +120,7 @@ class CWLPathIOManager(IOManager):
         return resolved
 
 
-@io_manager(name="path_registry")
+@io_manager
 def path_registry_io_manager(_):
     return CWLPathIOManager(base_dir="outputs_registry")
 
