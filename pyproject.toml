@@ -5,14 +5,23 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dagster-cwl-modern"
-version = "0.0.1"
-description = "Pattern A: CWL runner inside Dagster (modern API)"
+version = "0.1.0"
+description = "Pattern A: CWL runner inside Dagster (modern API), src-layout"
 requires-python = ">=3.9"
 dependencies = [
   "dagster>=1.7,<1.9",
   "dagster-webserver>=1.7,<1.9",
-  "cwltool>=3.1.202"
+  "cwltool>=3.1.202",
 ]
 
+[project.optional-dependencies]
+validation = [
+  "ruamel.yaml>=0.17",
+  "rocrate>=0.8",
+  ]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
 [tool.dagster]
-module_name = "dagster_cwl_modern"
+module_name = "dagster_cwl_modern.dagster_cwl_modern"

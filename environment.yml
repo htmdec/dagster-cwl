@@ -1,0 +1,12 @@
+
+name: dagster-cwl
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pip
+  - pip:
+      - "dagster>=1.7,<1.9"
+      - "dagster-webserver>=1.7,<1.9"
+      - "cwltool>=3.1.202"
+      - "-e .[validation]"

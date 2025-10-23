@@ -1,37 +1,22 @@
 
-# CWL + Dagster (Pattern A) — Modern Repo
+# CWL + Dagster (Pattern A) — src-layout
 
-This repo upgrades your CWL-in-Dagster PoC to **modern Dagster (>= 1.7)** with typed config and resources.
+This repo uses **src/** layout so editable installs and conda builds are robust.
 
-## Quickstart
+## Create env (Conda)
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -e .
+conda env create -f environment.yml
+conda activate dagster-cwl
+export DAGSTER_HOME="$(pwd)/.dagster_home"; mkdir -p "$DAGSTER_HOME"
 dagster dev
 ```
 
-Open http://localhost:3000, choose **cwl_job** or **cwl_job_with_consumer**, then in Launchpad load:
-
-```
-run_configs/cwl_job.yaml
-```
-
-This runs a tiny CWL tool that sums two integers and writes `sum.txt`. The downstream job selects
-the `sum_file` output and verifies it.
-
-## Files
-
-- `dagster_cwl_modern.py` — modern Dagster code (Pattern A)
-- `cwl/arith_workflow.cwl` — toy CWL `CommandLineTool`
-- `cwl/inputs.yml` — inputs for the CWL tool (`a` and `b`)
-- `run_configs/cwl_job.yaml` — ready-to-run Dagster config
-- `pyproject.toml` — points Dagster at this module so `dagster dev` works without flags
+Open http://localhost:3000 and load `run_configs/cwl_job.yaml` in Launchpad. Launch `cwl_job` or `cwl_job_with_consumer`.
 
 ## Notes
-
-- To collect CWLProv bundles, keep `provenance_dir: "prov"` in the run config.
-- Swap the runner by setting `executable: "toil-cwl-runner"` and keep the same op config.
-- For larger workflows, this Pattern A keeps Dagster simple and lets CWL handle internal scatter/steps.
+- Module path for Dagster discovery is set in `pyproject.toml` as:
+  `dagster_cwl_modern.dagster_cwl_modern`
+- The CWL toy tool writes `sum.txt`; the downstream op verifies it and emits metadata.
+- Install validations without conda by: `pip install -e .[validation]`
 ```

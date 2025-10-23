@@ -6,15 +6,15 @@ resources:
       default_args:
         - "--enable-dev"
         - "--no-match-user"
-      provenance_dir: "prov"        # optional
+      provenance_dir: "prov"
 
 ops:
   run_cwl_op:
     config:
-      cwl_path: "/mnt/data/dagster-cwl-modern/cwl/arith_workflow.cwl"
-      job_path: "/mnt/data/dagster-cwl-modern/cwl/inputs.yml"
-      outdir: "/mnt/data/dagster-cwl-modern/outputs"
-      cachedir: "/mnt/data/dagster-cwl-modern/.cwl-cache"
+      cwl_path: "/mnt/data/dagster-cwl-src/cwl/arith_workflow.cwl"
+      job_path: "/mnt/data/dagster-cwl-src/cwl/inputs.yml"
+      outdir: "/mnt/data/dagster-cwl-src/outputs"
+      cachedir: "/mnt/data/dagster-cwl-src/.cwl-cache"
       extra_args: []
   select_cwl_output:
     config:

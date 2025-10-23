@@ -1,11 +1,6 @@
 
 """
-CWL + Dagster (Pattern A) — modern Dagster API (>= 1.7)
-
-Run:
-  dagster dev -m dagster_cwl_modern
-or, with pyproject [tool.dagster] module_name set to "dagster_cwl_modern":
-  dagster dev
+CWL + Dagster (Pattern A) — modern Dagster API (>= 1.7) with src-layout.
 """
 
 from __future__ import annotations
@@ -30,14 +25,12 @@ from dagster import (
     In,
     InputContext,
     Nothing,
-    OpExecutionContext,
     Out,
     OutputContext,
     io_manager,
     job,
     op,
 )
-
 
 # --------------------------------------------------------------------
 # Utilities
