@@ -151,7 +151,7 @@ class RunCWLConfig(Config):
     required_resource_keys={"cwl_runner"},
     out=Out(dict, description="Resolved CWL outputs object (parsed JSON)."),
 )
-def run_cwl_op(context: OpExecutionContext) -> dict:
+def run_cwl_op(context) -> dict:
     cfg: RunCWLConfig = context.op_config
     runner = context.resources.cwl_runner.to_runtime()
 
@@ -295,7 +295,7 @@ def run_cwl_op(context: OpExecutionContext) -> dict:
     ins={"outputs_map": In(dict)},
     out=Out(str, io_manager_key="path_registry", description="Filesystem path of the selected CWL output"),
 )
-def select_cwl_output(context: OpExecutionContext, outputs_map: dict) -> str:
+def select_cwl_output(context, outputs_map: dict) -> str:
     key = context.op_config["output_key"]
     if key not in outputs_map:
         raise Exception(f"Output key '{key}' not found. Available: {list(outputs_map.keys())}")
@@ -307,7 +307,7 @@ def select_cwl_output(context: OpExecutionContext, outputs_map: dict) -> str:
 
 
 @op(ins={"file_path": In(str)}, out=Out(Nothing))
-def consume_selected_file(context: OpExecutionContext, file_path: str) -> None:
+def consume_selected_file(context, file_path: str) -> None:
     p = Path(file_path)
     if not p.exists():
         raise Exception(f"File does not exist: {p}")
