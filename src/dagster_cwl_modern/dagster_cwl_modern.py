@@ -1,8 +1,8 @@
 """
-CWL + Dagster (Pattern A) — Dagster 1.7.x compatible
+CWL + Dagster - Dagster 1.7.x compatible
 
 - Uses plain dict config_schema (no typed Config class) for maximum 1.7.x compatibility.
-- No OpExecutionContext type annotations (some 1.7 builds are picky).
+- No OpExecutionContext type annotations (avoids 1.7 finickiness).
 - IO managers defined without name= kwarg (older API).
 - CWL tool uses 'bash -lc' correctly with a dummy <NAME> arg so $1/$2 work.
 - Declares a SourceAsset so the CWL output shows up in Dagit's Assets tab.
