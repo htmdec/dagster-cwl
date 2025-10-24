@@ -162,3 +162,9 @@ This proof of concept demonstrates that:
 
 * A single Dagster op can fully orchestrate CWL workflows (if they are DAGs)
 * Dagster can capture CWL-level provenance and expose results as assets
+
+## Some Obvious Things
+* Validate that the CWL is a DAG
+* Provide more granularity in the called code (ops in Dagster parlance)
+*  Provide more thoughtful materialization of results in the run metadata
+*  Fix the idiocy (my hardcoded paths, etc.)
