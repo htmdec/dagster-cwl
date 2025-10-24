@@ -167,4 +167,5 @@ This proof of concept demonstrates that:
 * Validate that the CWL is a DAG
 * Provide more granularity in the called code (ops in Dagster parlance)
 *  Provide more thoughtful materialization of results in the run metadata
+*  Stay in touch with Simon and Simon about Dagster in their instrument control Node-Red workflows
 *  Fix the idiocy (my hardcoded paths, etc.)
